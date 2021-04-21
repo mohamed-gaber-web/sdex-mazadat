@@ -1,0 +1,22 @@
+<div class="resend-confirmation-link">
+  <h2>{{ 'resendConfirmationLink' | translate }}</h2>
+  <form #resendForm="ngForm">
+    <mat-form-field appearance="outline" class="w-100 mt-2">
+      <mat-label>{{ 'email' | translate }}</mat-label>
+      <input
+        matInput
+        placeholder="{{ 'email' | translate }}"
+        name="email"
+        [(ngModel)]="email"
+        required
+        email
+      />
+    </mat-form-field>
+    <div mat-dialog-actions class="mt-auto">
+      <button type="button" mat-raised-button color="primary" (click)="submit()">{{ 'send' | translate }}</button>
+      <button type="button" mat-button mat-dialog-close>
+        {{ 'close' | translate }}
+      </button>
+    </div>
+  </form>
+</div>

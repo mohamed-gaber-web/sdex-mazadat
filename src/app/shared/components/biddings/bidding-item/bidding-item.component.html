@@ -1,0 +1,74 @@
+<div class="product">
+  
+  <button
+    mat-icon-button
+    *ngIf="showHistory"
+    class="user-biddings"
+    (click)="showBiddings(item.id)"
+  >
+    <mat-icon>history</mat-icon>
+  </button>
+  <div class="category" *ngIf="item.biddingSubValue?.title">
+    {{ item.biddingSubValue?.title }}
+  </div>
+  <div class="img-ratio">
+    <img
+      [src]="
+        item.imageUrl
+          ? helpers.correctImageUrl(item.imageUrl)
+          : '/assets/images/placeholder-img.jpg'
+      "
+      alt="product-1"
+    />
+  </div>
+  <h3>{{ item.biddingTranslations[0]?.title }}</h3>
+
+  <!-- The Start Counter -->
+  <!-- [ngStyle]="{display: item.status === 'To be Started' ? 'none' : 'block'}" -->
+  <div class="count-message" *ngIf="item.status == 'To be Started'">
+    {{ 'biddingWillStartIn' | translate }}
+  </div>
+  <div class="count-message" *ngIf="item.status == 'In Progress'">
+    {{ 'biddingRunning' | translate }}
+  </div>
+  <div
+    class="count-message"
+    [class]="item.status == 'Completed' ? 'completed' : ''"
+    *ngIf="item.status == 'Completed'"
+  >
+    {{ 'biddingFinished' | translate }}
+  </div>
+  <div
+    class="counter"
+    *ngIf="item.status !== 'Completed'"
+    [class.has-days]="isRemainingDays"
+  >
+    <countdown
+      style="font-size: 30px; font-weight: 600; position: relative;"
+      [config]="countConfig"
+      *ngIf="countConfig"
+      (event)="handleEvent($event)"
+      #cd
+    >
+      $!m!:$!s!
+    </countdown>
+    <div class="count-label">
+      <span> {{ 'seconds' | translate }}</span>
+      <span> {{ 'minutes' | translate }}</span>
+      <span> {{ 'hours' | translate }}</span>
+      <span *ngIf="isRemainingDays"> {{ 'days' | translate }}</span>
+    </div>
+  </div>
+
+  <!-- The End Counter -->
+
+  <div class="desc">
+    <button class="btn-desc" [routerLink]="['/details', item.id]">
+      {{ 'details' | translate }}
+    </button>
+    <span class="icon-person">
+      <b> {{ item.numberOfValidUsersToBidd }} </b>
+      <mat-icon class="mat-icon-md">person</mat-icon>
+    </span>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<h1 class="title-head mb-4">{{ 'searchResults' | translate }}</h1>
+<app-search></app-search>
+<div class="products">
+  <app-bidding-item
+    [item]="bid"
+    *ngFor="
+      let bid of biddings
+        | paginate
+          : {
+              itemsPerPage: pageInfo.limit,
+              currentPage: pageInfo.pageNo + 1,
+              totalItems: pageInfo.total
+            }
+    "
+  ></app-bidding-item>
+</div>
+<pagination-controls
+  (pageChange)="pageChanged($event)"
+  autoHide="true"
+  responsive="true"
+  previousLabel="{{ 'previous' | translate }}"
+  nextLabel="{{ 'next' | translate }}"
+>
+</pagination-controls>

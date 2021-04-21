@@ -1,0 +1,106 @@
+<mat-tab-group >
+    <mat-tab label="{{'shipping-address' | translate}}">
+        <div class="p-2 mt-1">
+            <form [formGroup]="shippingForm" (ngSubmit)="onShippingFormSubmit(shippingForm.value)">     
+              <div fxLayout="row wrap">
+                <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+                  <mat-form-field class="w-100">
+                      <input matInput placeholder="{{'firstName' | translate}}" formControlName="firstName" required>
+                      <mat-error *ngIf="shippingFormErrors.firstName">{{shippingFormErrors.firstName}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+                  <mat-form-field class="w-100">
+                      <input matInput placeholder="{{'lastName' | translate}}" formControlName="lastName" required>
+                      <mat-error *ngIf="shippingFormErrors.lastName">{{shippingFormErrors.lastName}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+                  <mat-form-field class="w-100">
+                      <input matInput placeholder="{{'mobile' | translate}}" formControlName="mobile">
+                      <mat-error *ngIf="shippingFormErrors.mobile">{{shippingFormErrors.mobile}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+                  <mat-form-field class="w-100">
+                      <input matInput placeholder="{{'landline' | translate}}" formControlName="landLine">
+                      <mat-error *ngIf="shippingFormErrors.landLine">{{shippingFormErrors.landLine}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                  <mat-form-field class="w-100">
+                    <mat-select placeholder="{{'country' | translate}}" formControlName="countryId" required>
+                      <mat-option [value]=106>
+                          11
+                      </mat-option>
+                      <mat-option [value]=107>
+                        8
+                    </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="shippingFormErrors.countryId">{{shippingFormErrors.countryId}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                  <mat-form-field class="w-100">
+                      <input matInput placeholder="{{'city' | translate}}" formControlName="city" required>
+                      <mat-error *ngIf="shippingFormErrors.city">{{shippingFormErrors.city}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                  <mat-form-field class="w-100">
+                      <input matInput placeholder="{{'area' | translate}}" formControlName="area">
+                      <mat-error *ngIf="shippingFormErrors.area">{{shippingFormErrors.area}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                  <mat-form-field class="w-100">
+                      <input matInput placeholder="{{'street' | translate}}" formControlName="street" required>
+                      <mat-error *ngIf="shippingFormErrors.street">{{shippingFormErrors.street}}</mat-error>
+
+                    </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                  <mat-form-field class="w-100">
+                      <input matInput placeholder="{{'building' | translate}}" formControlName="buildingNumber">
+                      <mat-error *ngIf="shippingFormErrors.buildingNumber">{{shippingFormErrors.buildingNumber}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                  <mat-form-field class="w-100">
+                      <input matInput placeholder="{{'floor' | translate}}" formControlName="floorNumber" >
+                      <mat-error *ngIf="shippingFormErrors.floorNumber">{{shippingFormErrors.floorNumber}}</mat-error>
+
+                    </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                  <mat-form-field class="w-100">
+                      <input matInput placeholder="{{'apartment' | translate}}" formControlName="appartmentNumber" >
+                      <mat-error *ngIf="shippingFormErrors.appartmentNumber">{{shippingFormErrors.appartmentNumber}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                  <mat-form-field class="w-100">
+                      <input matInput placeholder="{{'landmark' | translate}}" formControlName="landmark" >
+                      <mat-error *ngIf="shippingFormErrors.landmark">{{shippingFormErrors.landmark}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                  <mat-form-field class="w-100">
+                      <input matInput placeholder="{{'location-type' | translate}}" formControlName="locationType" >
+                      <mat-error *ngIf="shippingFormErrors.locationType">{{shippingFormErrors.locationType}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="100" class="px-1">
+                  <mat-form-field class="w-100">
+                      <input matInput placeholder="{{'Note' | translate}}" formControlName="note" >
+                      <mat-error *ngIf="shippingFormErrors.note">{{shippingFormErrors.note}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="100" class="text-center mt-2">
+                    <button mat-raised-button color="primary" [disabled]="isLoading" (click)="onShippingFormSubmit(shippingForm.value)">{{'save' | translate}}</button>
+                </div>
+              </div>
+            </form>
+        </div>
+    </mat-tab>
+</mat-tab-group>

@@ -1,0 +1,32 @@
+<!-- <mat-toolbar fxLayout="column" class="mobile-nav" fxLayoutAlign="start">
+    <a mat-button routerLink="/" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">الرئيسية</a>
+
+    <a mat-button routerLink="/link5" routerLinkActive="horizontal-active-link" > من مزادات </a>
+
+    <a mat-button routerLink="/link4" routerLinkActive="horizontal-active-link" >عقاراتي</a>
+
+    <a mat-button routerLink="/faq" routerLinkActive="horizontal-active-link" >الاسئلة المتكررة</a>
+
+    <a mat-button routerLink="/link2" routerLinkActive="horizontal-active-link" >عقارات حكومية</a>
+
+    <a mat-button routerLink="/contact" routerLinkActive="horizontal-active-link" >اتصل بنا</a>
+    
+  
+
+</mat-toolbar> -->
+
+
+
+<ul class="mobile-nav">
+    <li> <a mat-button routerLink="/" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">{{ 'home' | translate }}</a></li>
+    <li> <a mat-button routerLink="/about" routerLinkActive="horizontal-active-link" > {{ 'about' | translate }} </a> </li>
+    <li> <a mat-button routerLink="/category" routerLinkActive="horizontal-active-link" > {{'categories' | translate}} </a> </li>
+    <li> <a mat-button routerLink="/faq" routerLinkActive="horizontal-active-link" >{{'faq' | translate}}</a></li>
+    <li><a mat-button routerLink="/contact" routerLinkActive="horizontal-active-link" >{{ 'contact' | translate }}</a></li>
+    <br >
+    <li>
+        <span  *ngIf="!loginService.IsLoggedIn" >
+            <a mat-button routerLink="/user/sign-in">{{'sign-in' | translate}} </a>
+        </span>
+    </li>
+</ul>

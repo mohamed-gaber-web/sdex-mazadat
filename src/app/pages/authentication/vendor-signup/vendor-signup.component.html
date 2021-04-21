@@ -1,0 +1,95 @@
+<div fxFlex="100" fxFlex.gt-sm="100" class="p-2" ngClass.sm="mt-2" ngClass.xs="mt-2">
+    <h2 class="text-muted text-center">{{'vendor-application' | translate}}</h2>
+<div >
+    <form  [formGroup]="vendorForm" (ngSubmit)="onVendorFormSubmit(vendorForm.value)">
+        <div fxLayout="row wrap">
+        <div fxFlex="100" fxFlex.gt-sm="50" class="p-2" ngClass.sm="mt-2" ngClass.xs="mt-2">
+            <div fxLayout="row" fxLayoutAlign="start">
+                <mat-form-field fxFlex.gt-xs="50" appearance="outline" class="mt-2">
+                    <mat-label>{{'firstName' | translate}}</mat-label>
+                    <input matInput placeholder="{{'firstName' | translate}}" formControlName="FirstName" required>
+                    <mat-error *ngIf="vendorFormErrors.FirstName">{{vendorFormErrors.FirstName}}</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="mt-2" style="margin-left: 10px;">
+                    <mat-label>{{'lastName' | translate}}</mat-label>
+                    <input matInput placeholder="{{'lastName' | translate}}" formControlName="LastName" required>
+                    <mat-error *ngIf="vendorFormErrors.LastName">{{vendorFormErrors.LastName}}</mat-error>
+                </mat-form-field>
+            </div>
+            <mat-form-field appearance="outline" class="w-100 mt-1">
+                <mat-label>{{'email' | translate}}</mat-label>
+                <input matInput placeholder="{{'email' | translate}}" formControlName="Email" required>
+                <mat-error *ngIf="vendorFormErrors.Email">{{vendorFormErrors.Email}}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-100 mt-2">
+                <mat-label>{{'phoneNumber' | translate}}</mat-label>
+                <input matInput placeholder="Phone Number" formControlName="PhoneNumber">
+                <mat-error *ngIf="vendorFormErrors.PhoneNumber">{{vendorFormErrors.PhoneNumber}}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-100 mt-2">
+                <mat-label>{{'birthdate' | translate}}</mat-label>
+                <input matInput placeholder="{{'birthdate' | translate}}" type="date" formControlName="BirthDate">
+                <mat-error *ngIf="vendorFormErrors.BirthDate">{{vendorFormErrors.BirthDate}}</mat-error>
+            </mat-form-field>
+            <mat-label>{{'gender' | translate}}</mat-label>
+            <mat-radio-group formControlName="Gender">
+                <mat-radio-button  class="example-radio-button" [value]=0>
+                    {{'male' | translate}}
+                </mat-radio-button>
+                <mat-radio-button  class="example-radio-button" [value]=1>
+                    {{'female' | translate}}
+                </mat-radio-button>
+                <mat-error *ngIf="vendorFormErrors.Gender">{{vendorFormErrors.Gender}}</mat-error>
+            </mat-radio-group>
+            <mat-form-field appearance="outline" class="w-100 mt-1">
+                <mat-label>{{'password' | translate}}</mat-label>
+                <input matInput placeholder="{{'password' | translate}}" formControlName="Password" type="password" minlength="6"
+                    required>
+                <mat-error *ngIf="vendorFormErrors.Password">{{vendorFormErrors.Password}}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-100 mt-1">
+                <mat-label>{{'password-confirmation' | translate}}</mat-label>
+                <input matInput placeholder="{{'password-confirmation' | translate}}" formControlName="ConfirmPassword" type="password"
+                    required>
+                <mat-error *ngIf="vendorFormErrors.ConfirmPassword">{{vendorFormErrors.ConfirmPassword}}</mat-error>
+            </mat-form-field>
+        </div>
+        <div fxFlex="100" fxFlex.gt-sm="50" class="p-2" ngClass.sm="mt-2" ngClass.xs="mt-2">
+            <mat-form-field appearance="outline" class="w-100 mt-2">
+                <mat-label>{{'national-ID' | translate}}</mat-label>
+                <ngx-mat-file-input (change)="onNationalChange()"  formControlName="NationalID"  placeholder="PDF file only" [accept]="'.png,.pdf,jpg,.jpeg'">
+                </ngx-mat-file-input>
+                <mat-icon matSuffix>folder</mat-icon>
+                <mat-error *ngIf="vendorFormErrors.NationalID">{{vendorFormErrors.NationalID}}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-100 mt-2">
+                <mat-label>{{'company-registration' | translate}}</mat-label>
+                <ngx-mat-file-input (change)="onCompanyChange()" formControlName="CompanyRegistration" placeholder="PDF file only" [accept]="'.png,.pdf,jpg,.jpeg'">
+                </ngx-mat-file-input>
+                <mat-icon matSuffix>folder</mat-icon>
+                <mat-error *ngIf="vendorFormErrors.CompanyRegistration">{{vendorFormErrors.CompanyRegistration}}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-100 mt-2">
+                <mat-label>{{'passport' | translate}}</mat-label>
+                <ngx-mat-file-input (change)="onPassportChange()" formControlName="Passport" placeholder="PDF file only" [accept]="'.png,.pdf,jpg,.jpeg'">
+                </ngx-mat-file-input>
+                <mat-icon matSuffix>folder</mat-icon>
+                <mat-error *ngIf="vendorFormErrors.Passport">{{vendorFormErrors.Passport}}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-100 mt-2">
+                <mat-label>{{'tax' | translate}}</mat-label>
+                <ngx-mat-file-input (change)="onTaxChange()" formControlName="Tax" placeholder="PDF file only" [accept]="'.png,.pdf,jpg,.jpeg'">
+                </ngx-mat-file-input>
+                <mat-icon matSuffix>folder</mat-icon>
+                <mat-error *ngIf="vendorFormErrors.Tax">{{vendorFormErrors.Tax}}</mat-error>
+            </mat-form-field>
+            <div class="text-center mt-2">
+                <button mat-fab color="primary" class="mat-elevation-z6" (click)="onVendorFormSubmit(vendorForm.value)"
+                    [disabled]="isLoading">
+                    <mat-icon>person_add</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>

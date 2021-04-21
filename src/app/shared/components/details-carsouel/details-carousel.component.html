@@ -1,0 +1,15 @@
+<div class="main-slider" *ngIf="details">
+  <div class="swiper-container h-100" [swiper]="config">
+    <div class="swiper-wrapper h-100">      
+      <div *ngFor="let slide of details" class="swiper-slide">
+        <div [attr.data-background]="slide" class="slide-item swiper-lazy">
+            <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+            <!-- <div class="mask"></div>   -->
+        </div>
+      </div>
+    </div>
+    <div class="swiper-pagination white"></div>
+    <button mat-mini-fab color="primary" *ngIf="details.length > 1" class="swiper-button-prev swipe-arrow"><mat-icon>keyboard_arrow_left</mat-icon></button>
+    <button mat-mini-fab color="primary" *ngIf="details.length > 1" class="swiper-button-next swipe-arrow"><mat-icon>keyboard_arrow_right</mat-icon></button>
+  </div>
+</div>

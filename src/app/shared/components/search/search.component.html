@@ -1,0 +1,26 @@
+<div class="search">
+  <form #searchForm="ngForm">
+    <div class="field">
+      <label>{{ 'categories' | translate }}</label>
+      <select class="form-control" name="CategoryId" [(ngModel)]="CategoryId">
+        <option *ngFor="let item of categories$ | async" [value]="item.id">{{
+          item.categoryTranslations[0]?.name
+        }}</option>
+      </select>
+    </div>
+    <input
+      type="text"
+      placeholder="{{ 'enterSearchKeyword' | translate }}"
+      name="SearchText"
+      class="form-control"
+      [(ngModel)]="SearchText"
+    />
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="search(searchForm.value)"
+    >
+      {{ 'search' | translate }}
+    </button>
+  </form>
+</div>

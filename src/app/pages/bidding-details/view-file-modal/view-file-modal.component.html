@@ -1,0 +1,14 @@
+<!-- <object [data]="srcUrl | safeUrl" type="application/pdf"></object> -->
+<ngx-extended-pdf-viewer
+  [base64Src]="this.data"
+  backgroundColor="#ffffff"
+  [height]="'90vh'"
+  [useBrowserLocale]="true"
+  [customToolbar]="customCheckboxZoomToolbar"
+  [handTool]="false"
+  [showHandToolButton]="false"
+></ngx-extended-pdf-viewer>
+
+<ng-template #customCheckboxZoomToolbar>
+  <div id="toolbarViewer"></div>
+</ng-template>

@@ -1,0 +1,49 @@
+$color-red: #F50B0B;
+
+span.ng-star-inserted {
+    font-size: 30px!important;
+    font-weight: 600!important;
+}
+
+.ngx-pagination .current {
+    background: #f50b0b!important;
+    
+}
+
+.counter {position: relative;}
+
+.count-label{
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    font-weight: 500;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 32px;
+    color: #000;
+}
+
+.count-label span{
+    margin: 0 3px;
+}
+
+@media (max-width: 480px) {
+
+    .products{flex-direction: column;}
+    .product { width: 100%!important; margin-bottom: 40px; padding-bottom: 20px;}
+    .price {
+        justify-content: space-between!important;
+        padding: 0 22px!important;
+    }
+}
+
+@media (min-width: 481px) and (max-width:1024px) {
+
+    .products{flex-direction: row; flex-wrap: wrap;}
+    .product { width: 48%!important; margin-bottom: 40px; padding-bottom: 20px;}
+    .price {
+        justify-content: space-between!important;
+        padding: 0 22px!important;
+    }
+}

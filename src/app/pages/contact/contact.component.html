@@ -1,0 +1,116 @@
+<mat-card fxLayout="row wrap" fxLayoutAlign="space-around" *ngIf="contactInfo$ | async as contactInfo">
+  <div fxFlex="100" fxFlex.gt-xs="33.3">
+    <div fxLayout="column" fxLayoutAlign="center center" class="text-center">
+      <mat-icon color="primary" class="mat-icon-lg">home</mat-icon>
+      <h3 class="primary-text py-1">{{ 'address' | translate }} :</h3>
+      <span class="text-muted">{{ contactInfo.address }}</span>
+    </div>
+  </div>
+  <div fxFlex="100" fxFlex.gt-xs="33.3" ngClass.xs="mt-2">
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <mat-icon color="primary" class="mat-icon-lg">call</mat-icon>
+      <h3 class="primary-text py-1">{{ 'phone' | translate }} :</h3>
+      <a href="tel:{{ contactInfo.phone }}" class="text-muted">{{ contactInfo.phone }}</a>
+    </div>
+  </div>
+  <div fxFlex="100" fxFlex.gt-xs="33.3" ngClass.xs="mt-2">
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <mat-icon color="primary" class="mat-icon-lg">mail_outline</mat-icon>
+      <h3 class="primary-text py-1">{{ 'email' | translate }} :</h3>
+      <a href="mailto:{{ contactInfo.email }}" class="text-muted">{{ contactInfo.email }}</a>
+    </div>
+  </div>
+  <div class="divider w-100 mt-2"></div>
+  <!-- <h3 class="w-100 text-center py-2">{{ 'contact' | translate }}</h3> -->
+
+  <!-- <form
+    [formGroup]="contactForm"
+    (ngSubmit)="onContactFormSubmit(contactForm.value)"
+    fxLayout="row wrap"
+  >
+    <div
+      fxFlex="100"
+      fxFlex.gt-sm="33.3"
+      class="px-1"
+      ngClass.sm="mt-1"
+      ngClass.xs="mt-1"
+    >
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>{{ 'name' | translate }}</mat-label>
+        <input
+          matInput
+          placeholder="{{ 'name' | translate }}"
+          formControlName="name"
+          required
+        />
+        <mat-error *ngIf="contactForm.controls.name.errors?.required">{{
+          'nameReq' | translate
+        }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div
+      fxFlex="100"
+      fxFlex.gt-sm="33.3"
+      class="px-1"
+      ngClass.sm="mt-1"
+      ngClass.xs="mt-1"
+    >
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>{{ 'email' | translate }}</mat-label>
+        <input
+          matInput
+          placeholder="{{ 'email' | translate }}"
+          formControlName="email"
+          required
+        />
+        <mat-error *ngIf="contactForm.controls.email.errors?.required">{{
+          'emailReq' | translate
+        }}</mat-error>
+        <mat-error
+          *ngIf="contactForm.controls.email.hasError('invalidEmail')"
+          >{{ 'emailErr' | translate }}</mat-error
+        >
+      </mat-form-field>
+    </div>
+    <div
+      fxFlex="100"
+      fxFlex.gt-sm="33.3"
+      class="px-1"
+      ngClass.sm="mt-1"
+      ngClass.xs="mt-1"
+    >
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>{{ 'phoneNumber' | translate }}</mat-label>
+        <input
+          matInput
+          placeholder="{{ 'phoneNumber' | translate }}"
+          formControlName="phone"
+          required
+        />
+        <mat-error *ngIf="contactForm.controls.phone.errors?.required">{{
+          'phoneReq' | translate
+        }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex="100" class="px-1 mt-1">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>{{ 'message' | translate }}</mat-label>
+        <textarea
+          matInput
+          placeholder="{{ 'message' | translate }}"
+          formControlName="message"
+          required
+          rows="7"
+        ></textarea>
+        <mat-error *ngIf="contactForm.controls.message.errors?.required">{{
+          'messageReq' | translate
+        }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="w-100 py-2 text-center">
+      <button mat-raised-button color="primary" type="submit">
+        {{ 'submitForm' | translate }}
+      </button>
+    </div>
+  </form> -->
+</mat-card>

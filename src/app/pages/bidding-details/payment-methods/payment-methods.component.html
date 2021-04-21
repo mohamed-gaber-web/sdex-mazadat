@@ -1,0 +1,29 @@
+<!-- <button
+  type="button"
+  class="btn btn-primary mt-2"
+  (click)="payByCreditCard()"
+>
+  {{ 'payByCreditCard' | translate }}
+</button> -->
+<div class="upload-file-btn mt-2" *ngIf="type === 'termsPaper'">
+  <input
+    type="file"
+    id="upload_file"
+    #inputFile
+    (input)="
+      payByUploadingImage($event.target.files[0])
+    "
+  />
+  <label for="upload_file" class="btn btn-primary">{{ 'payByCheque' | translate }}</label>
+</div>
+<div class="upload-file-btn mt-2" *ngIf="type === 'insurance'">
+  <input
+    type="file"
+    id="upload_file_2"
+    #inputFile
+    (input)="
+      payByUploadingImage($event.target.files[0], type)
+    "
+  />
+  <label for="upload_file_2" class="btn btn-primary">{{ 'payByCheque' | translate }}</label>
+</div>

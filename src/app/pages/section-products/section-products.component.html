@@ -1,0 +1,52 @@
+<div class="home-product">
+    <h1 class="product-title"> العقارات </h1>
+    
+    <div class="products">
+        <div class="product" *ngFor="let prod of collection | paginate: { itemsPerPage: 4, currentPage: p }">
+            <div class="category">
+                {{ prod.category }}
+            </div>
+            <img src="{{prod.imgPath}}" alt="product-1" />
+            <h3> {{ prod.name }} </h3>
+            <hr />
+            <div class="counter">
+                <countdown 
+                style="font-size: 30px; font-weight: 600; position: relative;" 
+                #cd [config]="{leftTime: 120}">
+                </countdown>
+                <div class="count-label">
+                    <span> ثوانى</span>
+                    <span> دقائق</span>
+                    <span> ساعات</span>
+                </div>
+            </div>
+            <!-- day = 24/hours * 60M * 60S -->
+            <div class="price">
+                <span> {{'start-price' | translate}}: <b> {{ prod.priceStart }} جنية </b> </span>
+                <span>{{'current-price' | translate}}: <b> {{ prod.priceEnd }} جنية </b> </span>
+            </div>
+
+            <div class="desc">
+                <button class="btn-desc" routerLink="/details"> {{'details' | translate}}  </button>
+                <span class="icon-person"> <b> {{ prod.person }} </b> <mat-icon class="mat-icon-md">person</mat-icon> </span>
+            </div>
+        
+        </div>
+
+    </div>
+
+    <div class="pagination">
+        <!-- <ul>  
+            <li> <a href="" class="active"> 1 </a> </li>
+            <li> <a href=""> 2 </a> </li>
+            <li> <a href=""> 3 </a> </li>
+            <li> <a href=""> 4 </a> </li>
+            
+        </ul> -->
+        <!-- <ul>
+            <li *ngFor="let item of collection | paginate: { itemsPerPage: 4, currentPage: p }"> ... </li>
+        </ul> -->
+                     
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+</div>

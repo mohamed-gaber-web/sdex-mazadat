@@ -1,0 +1,12 @@
+<app-main-carousel [slidesInput]="slides$ | async"></app-main-carousel>
+<app-search></app-search>
+<div class="home-product">
+  <h2 class="product-title mt-3">{{ 'categories' | translate }}</h2>
+  <app-categories-list [categories]="categories$ | async"></app-categories-list>
+  <ng-container *ngIf="featureMzadat$ | async as featuredBiddings">
+    <ng-container *ngIf="featuredBiddings.length">
+      <h2 class="product-title">{{ 'biddings' | translate }}</h2>
+      <app-biddings-list [biddings]="featuredBiddings"></app-biddings-list>
+    </ng-container>
+  </ng-container>
+</div>

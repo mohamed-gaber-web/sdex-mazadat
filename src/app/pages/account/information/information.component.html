@@ -1,0 +1,62 @@
+<div fxLayout="row wrap">
+    <!--Change Password Form-->
+    <div fxFlex="100" fxFlex.gt-sm="50" class="p-2" ngClass.sm="mt-2" ngClass.xs="mt-2">
+        <h2 class="text-muted text-center">{{'change-password' | translate}}</h2>
+        <form [formGroup]="passwordForm" (ngSubmit)="onPasswordFormSubmit(passwordForm.value)">            
+            <mat-form-field class="w-100 mt-2">
+                <input matInput placeholder="{{'current-password' | translate}}" formControlName="OldPassword" type="password" minlength="6" required>
+                <mat-error *ngIf="passwordFormErrors.OldPassword">{{passwordFormErrors.OldPassword}}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="w-100 mt-1">
+                <input matInput placeholder="{{'new-password' | translate}}" formControlName="NewPassword" type="password" minlength="6" required>
+                <mat-error *ngIf="passwordFormErrors.NewPassword">{{passwordFormErrors.NewPassword}}</mat-error>
+            </mat-form-field> 
+            <mat-form-field class="w-100 mt-1">
+              <input matInput placeholder="{{'confirm-new-password' | translate}}" formControlName="ConfirmNewPassword" type="password" required>
+              <mat-error *ngIf="passwordFormErrors.ConfirmNewPassword">{{passwordFormErrors.ConfirmNewPassword}}</mat-error>
+            </mat-form-field>
+            <div class="text-center mt-2">
+                <button mat-raised-button color="primary" (click)="onPasswordFormSubmit(passwordForm.value)" [disabled]="isLoading" >{{'save' | translate}}</button>
+            </div>
+        </form>
+    </div>
+    <!--User Form-->
+    <div fxFlex="100" fxFlex.gt-sm="50" class="p-2" ngClass.sm="mt-2" ngClass.xs="mt-2">
+        <h2 class="text-muted text-center">{{'profile' | translate}}</h2>
+        <form [formGroup]="userForm" (ngSubmit)="onUserFormSubmit(userForm.value)">            
+            <mat-form-field class="w-100 mt-2">
+                <input matInput placeholder="{{'firstName' | translate}}" formControlName="firstName" type="text" minlength="6" required>
+                <mat-error *ngIf="userFormErrors.firstName">{{userFormErrors.firstName}}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="w-100 mt-1">
+                <input matInput placeholder="{{'lastName' | translate}}" formControlName="lastName" type="text" minlength="6" required>
+                <mat-error *ngIf="userFormErrors.lastName">{{userFormErrors.lastName}}</mat-error>
+            </mat-form-field> 
+            <mat-form-field class="w-100 mt-1">
+              <input matInput placeholder="{{'email' | translate}}" formControlName="email" type="email" required>
+              <mat-error *ngIf="userFormErrors.email">{{userFormErrors.email}}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="w-100 mt-1">
+                <input matInput placeholder="{{'phoneNumber' | translate}}" formControlName="phoneNumber" type="text" required>
+                <mat-error *ngIf="userFormErrors.phoneNumber">{{userFormErrors.phoneNumber}}</mat-error>
+              </mat-form-field>
+            <mat-form-field class="w-100 mt-1">
+                <input matInput placeholder="{{'birthdate' | translate}}" formControlName="birthdate" type="date" required>
+                <mat-error *ngIf="userFormErrors.birthdate">{{userFormErrors.birthdate}}</mat-error>
+            </mat-form-field>
+            <mat-label>{{'gender' | translate}}</mat-label><br/>
+            <mat-radio-group formControlName="gender">
+                <mat-radio-button  class="example-radio-button" [value]=0>
+                    {{'male' | translate}}
+                </mat-radio-button>
+                <mat-radio-button  class="example-radio-button" [value]=1>
+                    {{'female' | translate}}
+                </mat-radio-button>
+                <mat-error *ngIf="userFormErrors.gender">{{userFormErrors.gender}}</mat-error>
+            </mat-radio-group>
+            <div class="text-center mt-2">
+                <button mat-raised-button color="primary" (click)="onUserFormSubmit(userForm.value)" [disabled]="isLoading" >{{'save' | translate}}</button>
+            </div>
+        </form>
+    </div>
+</div> 
