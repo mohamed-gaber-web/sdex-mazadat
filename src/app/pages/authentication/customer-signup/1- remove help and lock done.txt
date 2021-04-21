@@ -1,7 +1,0 @@
-1- remove help and lock done
-2- footer last three links done
-3- contact us remove form  done
-4- phone dynamic in top 
-5- my account redirect account setting
-6- remove order histroy
-7- remove social media and or Sign in with one click

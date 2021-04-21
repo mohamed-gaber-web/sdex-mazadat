@@ -9,20 +9,41 @@ import { Data, AppService } from '../../app.service';
 export class CartComponent implements OnInit {
   total = [];
   grandTotal = 0;
+  grandTotalDiscount = 0;
   cartItemCount = [];
   cartItemCountTotal = 0;
+  cartListStorage; // cart list items from localStorage
+  cartCountItem;
+  totalCartCount;
+  totalPriceItems;
+  totalCartDiscount = [];
   constructor(public appService:AppService) { }
 
   ngOnInit() {
-    this.appService.Data.cartList.forEach(product=>{
-      this.total[product.id] = product.cartCount*product.newPrice;
-      this.grandTotal += product.cartCount*product.newPrice;
+    /// code me get cart list from localStorage
+    
+    this.cartListStorage = JSON.parse(localStorage.getItem('cartList'));
+    this.cartListStorage.forEach(product=>{
+      this.total[product.id] = product.cartCount*product.price;
+      this.totalCartDiscount[product.id] = product.cartCount*product.price - product.discount;
+      this.grandTotal += product.discount ? product.cartCount*product.price - product.discount : product.cartCount*product.price;
+      this.grandTotalDiscount += product.cartCount*product.discount;
+      // this.totalCartDiscount = product.cartCount * product.discount
       this.cartItemCount[product.id] = product.cartCount;
       this.cartItemCountTotal += product.cartCount;
     })
+
+
+    // this.cartListStorage = JSON.parse(localStorage.getItem('cartList'));
+
+    // this.cartListStorage.forEach(element => {
+    //     this.cartCountItem = element.cartCount;
+    //     this.totalCartCount = this.totalCartCount + element.cartCount;
+    //     this.totalPriceItems = this.totalPriceItems + (element.cartCount * element.price)
+    // });
   }
 
-  public updateCart(value){
+  public updateCart(value){    
     if(value){
       this.total[value.productId] = value.total;
       this.cartItemCount[value.productId] = value.soldQuantity;
@@ -38,7 +59,7 @@ export class CartComponent implements OnInit {
       this.appService.Data.totalPrice = this.grandTotal;
       this.appService.Data.totalCartCount = this.cartItemCountTotal;
 
-      this.appService.Data.cartList.forEach(product=>{
+      this.cartListStorage.forEach(product=>{
         this.cartItemCount.forEach((count,index)=>{
           if(product.id == index){
             product.cartCount = count;
@@ -50,9 +71,9 @@ export class CartComponent implements OnInit {
   }
 
   public remove(product) {
-    const index: number = this.appService.Data.cartList.indexOf(product);
+    const index: number = this.cartListStorage.indexOf(product);
     if (index !== -1) {
-      this.appService.Data.cartList.splice(index, 1);
+      this.cartListStorage.splice(index, 1);
       this.grandTotal = this.grandTotal - this.total[product.id]; 
       this.appService.Data.totalPrice = this.grandTotal;       
       this.total.forEach(val => {
@@ -70,15 +91,17 @@ export class CartComponent implements OnInit {
       });
       this.appService.resetProductCartCount(product);
     }     
+    localStorage.setItem('cartList', JSON.stringify(this.cartListStorage));
   }
 
   public clear(){
-    this.appService.Data.cartList.forEach(product=>{
+    this.cartListStorage.forEach(product=>{
       this.appService.resetProductCartCount(product);
     });
-    this.appService.Data.cartList.length = 0;
+    this.cartListStorage.length = 0;
     this.appService.Data.totalPrice = 0;
     this.appService.Data.totalCartCount = 0;
+    localStorage.setItem('cartList', JSON.stringify(this.cartListStorage));
   } 
 
 }

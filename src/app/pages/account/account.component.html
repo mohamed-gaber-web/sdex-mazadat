@@ -3,7 +3,7 @@
         <mat-nav-list class="mat-elevation-z1 h-100">
             <mat-list-item *ngFor="let link of links">              
                 <mat-icon matListIcon class="mat-icon-sm">{{link.icon}}</mat-icon>
-                <a matLine [routerLink]="link.href" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">{{ helpers.getTranslation(link?.name) }}</a>
+                <a matLine [routerLink]="link.href" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">{{ link.name }}</a>
             </mat-list-item>
         </mat-nav-list>
     </mat-sidenav>
@@ -12,7 +12,7 @@
             <button *ngIf="!sidenavOpen" mat-icon-button (click)="sidenav.toggle()">
                 <mat-icon>more_vert</mat-icon>
             </button>
-            <h3>{{'my-account' | translate}}</h3>
+            <h3>My Account</h3>
         </div>
         <div class="account-wrapper mat-elevation-z1">
             <router-outlet></router-outlet>

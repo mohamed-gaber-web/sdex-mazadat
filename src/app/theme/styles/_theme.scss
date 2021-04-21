@@ -1,7 +1,5 @@
 @import '~@angular/material/theming';
-// @include mat-core();
-$custom-typography: mat-typography-config($font-family: 'Tajawal, sans-serif;');
-@include mat-core($custom-typography);
+@include mat-core();
 
 @import 'theme-reset';
 .app{
@@ -35,9 +33,4 @@ $custom-typography: mat-typography-config($font-family: 'Tajawal, sans-serif;');
         @include angular-material-theme($grey-theme);
         @include theme-reset($grey-theme);
     }
-    // &.black{
-    //     @import "skins/grey";
-    //     @include angular-material-theme($grey-theme);
-    //     @include theme-reset($black-theme);
-    // }
 }

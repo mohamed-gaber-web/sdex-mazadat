@@ -1,35 +1,35 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  FormControl,
-} from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { emailValidator } from 'src/app/theme/utils/app-validators';
-import LoginCredentials from 'src/app/shared/models/LoginCredentials';
-import { StorageService } from 'src/app/shared/services/storage.service';
-import { AuthenticationService } from '../authentication.service';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { emailValidator, matchingPasswords } from '../../../theme/utils/app-validators';
 import { Subscription } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
-import { ResendConfirmationLinkModalComponent } from './resend-confirmation-link-modal/resend-confirmation-link-modal.component';
+import { StorageService } from 'src/app/shared/services/storage.service';
+import { AuthService } from '../auth.service';
+import { LoginCustomer } from 'src/app/shared/models/customer-login';
+
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
-  styleUrls: ['./sign-in.component.scss'],
+  styleUrls: ['./sign-in.component.scss']
 })
-export class SignInComponent implements OnInit, OnDestroy {
-  subs: Subscription[] = [];
-  isLoading = false;
-  hide = true;
+export class SignInComponent implements OnInit {
+  loginForm: FormGroup;
+  registerForm: FormGroup;
+  isLoading: boolean = false;
+  hide: boolean = true;
   returnUrl: string;
+  loginUser: LoginCustomer;
+  subs: Subscription[] = [];
+  loginCredentials: LoginCustomer;
 
   loginFormErrors = {
     Email: '',
     Password: '',
   };
+
   loginValidationMessages = {
     Email: {
       required: 'Email field is required',
@@ -39,23 +39,30 @@ export class SignInComponent implements OnInit, OnDestroy {
       required: 'Password field is required',
     },
   };
-  loginForm: FormGroup;
-  loginCredentials: LoginCredentials;
-  constructor(
-    public formBuilder: FormBuilder,
-    public router: Router,
-    private dialog: MatDialog,
-    public route: ActivatedRoute,
-    public snackBar: MatSnackBar,
-    public signInService: AuthenticationService,
-    private storageService: StorageService
-  ) {}
 
-  ngOnInit(): void {
+  constructor(
+    public formBuilder: FormBuilder, 
+    public router:Router, 
+    public snackBar: MatSnackBar,
+    public route: ActivatedRoute,
+    public storageService: StorageService,
+    public translate: TranslateService,
+    public auth: AuthService) {}
+
+
+
+  ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
-    this.loginCredentials = new LoginCredentials();
+    this.loginCredentials = new LoginCustomer();
     this.buildLoginForm();
+
+    // this.loginForm = this.formBuilder.group({
+    //   'email': ['', Validators.compose([Validators.required, emailValidator])],
+    //   'password': ['', Validators.compose([Validators.required, Validators.minLength(6)])] 
+    // });
+
   }
+
   buildLoginForm() {
     this.loginForm = this.formBuilder.group({
       Email: ['', Validators.compose([Validators.required, emailValidator])],
@@ -71,7 +78,6 @@ export class SignInComponent implements OnInit, OnDestroy {
       const input = this.loginForm.get(field) as FormControl;
       if (input.invalid && (input.dirty || isSubmitting)) {
         for (const error of Object.keys(input.errors)) {
-          console.log(error);
           this.loginForm[field] = this.loginValidationMessages[field][error];
         }
       }
@@ -83,24 +89,32 @@ export class SignInComponent implements OnInit, OnDestroy {
     if (this.loginForm.valid) {
       this.isLoading = true;
       Object.assign(this.loginCredentials, this.loginForm.value);
-      this.signInService.signIn(this.loginCredentials).subscribe(
+      this.auth.signInUser(this.loginCredentials).subscribe(
         (response) => {
-          this.storageService.setAccessToken(response);
-          this.storageService.setExpiresIn(
-            new Date(response['.expires']).getTime() / 1000
-          );
-          // this.signInService.IsLoggedIn();
-          this.snackBar.open('You signed in successfully!', '×', {
-            panelClass: 'success',
-            verticalPosition: 'top',
-            duration: 3000,
-          });
-          this.router.navigateByUrl(this.returnUrl);
+          
+          if(response['success'] === true) {
+            
+            this.storageService.setAccessToken(response['result']);
+            this.storageService.setExpiresIn(
+              new Date(response['.expires']).getTime() / 1000 // .expires
+            );
+            // this.signInService.IsLoggedIn();
+            this.snackBar.open('You signed in successfully!', '×', {
+              panelClass: 'success',
+              verticalPosition: 'top',
+              duration: 3000,
+            });
+            this.router.navigateByUrl(this.returnUrl);
+          } else {
+            this.snackBar.open(response['arrayMessage'][0], '×', {
+              panelClass: 'error',
+              verticalPosition: 'top',
+              duration: 3000,
+            });
+            this.router.navigate(['/user/sign-in'])
+          }
         },
         (error) => {
-          if (error.error[0] === 'Your email not confirmed') {
-            this.resendConfirmationLink();
-          }
           Object.keys(error).forEach((key) => {
             this.snackBar.open(error[key][0], '×', {
               panelClass: 'error',
@@ -117,13 +131,9 @@ export class SignInComponent implements OnInit, OnDestroy {
     }
   }
 
-  resendConfirmationLink() {
-    this.dialog.open(ResendConfirmationLinkModalComponent, {
-      panelClass: 'small-modal',
-    });
-  }
 
   ngOnDestroy() {
     this.subs.forEach((sub) => sub.unsubscribe());
   }
+
 }

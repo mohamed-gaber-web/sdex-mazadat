@@ -10,7 +10,7 @@ import { BrandComponent } from './brand/brand.component';
 
 export const routes = [
   { path: '', component: BrandsComponent, pathMatch: 'full' },
-  { path: ':name', component: BrandComponent }
+  { path: ':id', component: BrandComponent }
 ];
 
 @NgModule({

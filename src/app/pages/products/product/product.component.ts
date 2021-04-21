@@ -1,13 +1,19 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { SwiperConfigInterface, SwiperDirective } from 'ngx-swiper-wrapper';
-import { AppService } from '../../../app.service';
-import { Product } from "../../../app.models";
+import { Data, AppService } from '../../../app.service';
 import { emailValidator } from '../../../theme/utils/app-validators';
 import { ProductZoomComponent } from './product-zoom/product-zoom.component';
-import { Meta } from '@angular/platform-browser';import { DOCUMENT } from "@angular/common";
+import { ProductsService } from 'src/app/shared/services/products.service';
+import { Product } from 'src/app/shared/models/product';
+import { TranslateService } from '@ngx-translate/core';
+import { StorageService } from 'src/app/shared/services/storage.service';
+import { tap } from 'rxjs/operators';
+import { UiService } from 'src/app/shared/services/ui.service';
+
+
 
 @Component({
   selector: 'app-product',
@@ -24,40 +30,41 @@ export class ProductComponent implements OnInit {
   private sub: any;
   public form: FormGroup;
   public relatedProducts: Array<Product>;
+  id: number;
+  isLoading = false;
 
-  constructor(public appService:AppService, 
-              private activatedRoute: ActivatedRoute, 
-              public dialog: MatDialog, 
-              public formBuilder: FormBuilder,
-              private meta: Meta,
-              @Inject(DOCUMENT) private document) {
+  constructor(
+    public appService:AppService, 
+    public productsService: ProductsService,
+    public activatedRoute: ActivatedRoute, 
+    public dialog: MatDialog, 
+    public formBuilder: FormBuilder,
+    public translate: TranslateService,
+    private storageService: StorageService,
+    public uiService: UiService) {  }
 
-    this.meta.addTags([
-      { name: 'twitter:card', content: 'summary_large_image' },
-      { name: 'twitter:site', content: '@themeseason' },
-      { name: 'twitter:title', content: 'Product Name' },
-      { name: 'twitter:description', content: 'Product description' },
-      { name: 'twitter:image', content: 'https://fakeimg.pl/600x400/' },
-      { name: 'og:title', content: 'Product Name' },
-      { name: 'og:description', content: 'Product description' },
-      { name: 'og:image', content: 'https://fakeimg.pl/600x400/' },
-      { name: 'og:url', content: 'http://themeseason.com' },
-      { name: 'og:site_name', content: 'Emporium' },
-      { name: 'og:type', content: 'website' }
-    ]);
+  ngOnInit() {   
+     
+    this.sub = this.activatedRoute.data
+      .subscribe(productId => this.id = +productId['id'])
 
-  }
-
-  ngOnInit() {      
-    this.sub = this.activatedRoute.params.subscribe(params => { 
-      this.getProductById(params['id']); 
-    }); 
     this.form = this.formBuilder.group({ 
       'review': [null, Validators.required],            
       'name': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
       'email': [null, Validators.compose([Validators.required, emailValidator])]
     }); 
-    this.getRelatedProducts();    
+    // this.getRelatedProducts();  
+    this.getProductById(this.id);
+    this.sub = this.translate.onLangChange
+        .pipe(
+          tap((res: any) => {
+            const flag = this.storageService.getFlag(res.lang);
+            this.storageService.setLanguage(flag);
+            this.getProductById(this.id);
+            location.reload()
+          })
+        )
+        .subscribe()
   }
 
   ngAfterViewInit(){
@@ -82,52 +89,39 @@ export class ProductComponent implements OnInit {
     }
   }
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-    this.meta.removeTag('name="twitter:card"');
-    this.meta.removeTag('name="twitter:site"');
-    this.meta.removeTag('name="twitter:title"');
-    this.meta.removeTag('name="twitter:description"');
-    this.meta.removeTag('name="twitter:image"');
-    this.meta.removeTag('name="og:title"');
-    this.meta.removeTag('name="og:description"');
-    this.meta.removeTag('name="og:image"');
-    this.meta.removeTag('name="og:url"');
-    this.meta.removeTag('name="og:site_name"');
-    this.meta.removeTag('name="og:type"');
-  } 
-
-  public getProductById(id){
-    this.appService.getProductById(id).subscribe(data=>{
-      this.product = data;
-      this.image = data.images[0].medium;
-      this.zoomImage = data.images[0].big;
+  public getProductById(id: number){
+    
+    
+    this.uiService.showLoadingBar();
+    this.activatedRoute.data.subscribe( data => {      
+      console.log( data.productResolve['result'] );
+      // productCategoryId
+      
+      this.uiService.hideLoadingBar();
+      this.product = data.productResolve['result'];
+      data.productResolve['result'].imagePaths.forEach(element => {
+        this.image = element;
+      });
+      data.productResolve['result'].imagePaths.forEach(elementZoom => {
+        this.zoomImage = elementZoom
+       });
       setTimeout(() => { 
         this.config.observer = true;
        // this.directiveRef.setIndex(0);
       });
-
-      let port = (this.document.location.port) ? ':'+this.document.location.port+'/' : '/';   
-      let url = this.document.location.protocol +'//'+ this.document.location.hostname + port;
-      this.meta.updateTag({ name: 'twitter:title', content: this.product.name });
-      this.meta.updateTag({ name: 'twitter:description', content: this.product.description });
-      this.meta.updateTag({ name: 'twitter:image', content: url + this.product.images[0].medium });     
-      this.meta.updateTag({ name: 'og:title', content: this.product.name });
-      this.meta.updateTag({ name: 'og:description', content: this.product.description });
-      this.meta.updateTag({ name: 'og:image', content: url + this.product.images[0].medium });
-
     });
+    
   }
 
-  public getRelatedProducts(){
-    this.appService.getProducts('related').subscribe(data => {
-      this.relatedProducts = data;
-    })
-  }
+  // public getRelatedProducts(){
+  //   this.appService.getProducts('related').subscribe(data => {
+  //     this.relatedProducts = data;
+  //   })
+  // }
 
   public selectImage(image){
-    this.image = image.medium;
-    this.zoomImage = image.big;
+    this.image = image;
+    this.zoomImage = image;
   }
 
   public onMouseMove(e){
@@ -158,6 +152,10 @@ export class ProductComponent implements OnInit {
       panelClass: 'zoom-dialog'
     });
   }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  } 
 
   public onSubmit(values:Object):void {
     if (this.form.valid) {

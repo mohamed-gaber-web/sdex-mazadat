@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { SwiperModule } from 'ngx-swiper-wrapper';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -33,41 +34,37 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
+
+
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   wheelPropagation: true,
-  suppressScrollX: true,
+  suppressScrollX: true               
 };
-import { PipesModule } from '../theme/pipes/pipes.module';
-import { RatingComponent } from './components/rating/rating.component';
-import { ControlsComponent } from './components/controls/controls.component';
-import { MainCarouselComponent } from './components/main-carousel/main-carousel.component';
-import { DetailsCarouselComponent } from './components/details-carsouel/details-carousel.component';
-import { BrandsCarouselComponent } from './components/brands-carousel/brands-carousel.component';
-import { ProductsCarouselComponent } from './components/products-carousel/products-carousel.component';
-import { ProductDialogComponent } from './components/products-carousel/product-dialog/product-dialog.component';
-import { BannersComponent } from './components/banners/banners.component';
-import { CategoryListComponent } from './components/category-list/category-list.component';
-import { BiddingsListComponent } from './components/biddings/biddings-list/biddings-list.component';
-import { BiddingItemComponent } from './components/biddings/bidding-item/bidding-item.component';
-import { CountdownModule } from 'ngx-countdown';
-import { DataService } from './services/data.service';
-import { BiddingsService } from './services/biddings.service';
-import { TranslateModule } from '@ngx-translate/core';
-import { NgxPaginationModule } from 'ngx-pagination';
-import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
+
 import { LoadingBarModule } from '@ngx-loading-bar/core';
-import { UiService } from './services/ui.service';
-import { SafePipe } from './pipes/safe.pipe';
-import { HelpersService } from './services/helpers.service';
-import { CategoriesListComponent } from './components/categories/categories-list/categories-list.component';
+
+
+import { TranslateModule } from '@ngx-translate/core';
+
+
+import { PipesModule } from '../theme/pipes/pipes.module';
+import { RatingComponent } from './rating/rating.component';
+import { ControlsComponent } from './controls/controls.component';
+import { MainCarouselComponent } from './main-carousel/main-carousel.component';
+import { BrandsCarouselComponent } from './brands-carousel/brands-carousel.component';
+import { ProductsCarouselComponent } from './products-carousel/products-carousel.component';
+import { ProductDialogComponent } from './products-carousel/product-dialog/product-dialog.component';
+import { BannersComponent } from './banners/banners.component';
+import { CategoryListComponent } from './category-list/category-list.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { EditAddressFormComponent } from './edit-address-form/edit-address-form.component';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BiddingLogModalComponent } from './components/biddings/bidding-log-modal/bidding-log-modal.component';
-import { SwiperModule } from 'ngx-swiper-wrapper';
-import { SearchComponent } from './components/search/search.component';
-import { TermsModalComponent } from './modals/terms-modal/terms-modal.component';
+
+
 
 @NgModule({
   imports: [
@@ -108,18 +105,13 @@ import { TermsModalComponent } from './modals/terms-modal/terms-modal.component'
     MatStepperModule,
     PerfectScrollbarModule,
     PipesModule,
-    CountdownModule,
     TranslateModule,
-    NgxPaginationModule,
-    LoadingBarRouterModule,
     LoadingBarModule,
-    FormsModule,
-    ReactiveFormsModule,
+    FormsModule, 
+    ReactiveFormsModule
   ],
   exports: [
-    CommonModule,
     RouterModule,
-    TranslateModule,
     SwiperModule,
     FlexLayoutModule,
     MatAutocompleteModule,
@@ -158,56 +150,29 @@ import { TermsModalComponent } from './modals/terms-modal/terms-modal.component'
     RatingComponent,
     ControlsComponent,
     MainCarouselComponent,
-    DetailsCarouselComponent,
     BrandsCarouselComponent,
     ProductsCarouselComponent,
     ProductDialogComponent,
     BannersComponent,
     CategoryListComponent,
-    BiddingsListComponent,
-    BiddingItemComponent,
-    CountdownModule,
-    NgxPaginationModule,
-    LoadingBarRouterModule,
-    LoadingBarModule,
-    SafePipe,
-    FormsModule,
-    CategoriesListComponent,
-    ReactiveFormsModule,
-    SearchComponent,
+    ConfirmDialogComponent,
+    TranslateModule
   ],
   declarations: [
     RatingComponent,
     ControlsComponent,
     MainCarouselComponent,
-    DetailsCarouselComponent,
     BrandsCarouselComponent,
     ProductsCarouselComponent,
     ProductDialogComponent,
     BannersComponent,
     CategoryListComponent,
-    BiddingsListComponent,
-    BiddingItemComponent,
-    SafePipe,
-    CategoriesListComponent,
-    BiddingLogModalComponent,
-    SearchComponent,
-    TermsModalComponent,
-  ],
-  entryComponents: [
-    ProductDialogComponent,
-    BiddingLogModalComponent,
-    TermsModalComponent,
-  ],
-  providers: [
-    {
-      provide: PERFECT_SCROLLBAR_CONFIG,
-      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
-    },
-    DataService,
-    BiddingsService,
-    UiService,
-    HelpersService,
-  ],
+    ConfirmDialogComponent,
+    EditAddressFormComponent,
+    
+  ], 
+  providers:[
+    { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG }
+  ]
 })
-export class SharedModule {}
+export class SharedModule { }

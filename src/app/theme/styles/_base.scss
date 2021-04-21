@@ -1,12 +1,5 @@
 @import "variables";
 
-@font-face {
-    font-family: arabicFont;
-    src: url("assets/fonts/Tajawal-Regular.ttf");
-}
-
-$colorprimary: #00b8f1;
-
 /******* Base styles *******/
 html{
     height: 100%;
@@ -14,7 +7,7 @@ html{
 body{
     height: 100%;
     margin:0; padding: 0;
-    font-family: arabicFont /* Roboto, sans-serif*/;
+    font-family: $font-family;
     font-size: 14px;
     line-height: 1.5;
 }
@@ -49,6 +42,7 @@ a{
 .theme-container{
     max-width: $theme-max-width;
     margin: 0 auto;
+    width: 100%;
 }
 .light-block.mat-card{
     background: rgba(0,0,0,0.03) !important;
@@ -238,24 +232,6 @@ a{
 .mt-3{
     margin-top: 30px !important;
 }
-.mb-1{
-    margin-bottom: 10px !important;
-}
-.mb-2{
-    margin-bottom: 20px !important;
-}
-.mb-3{
-    margin-bottom: 30px !important;
-}
-.mb-4{
-    margin-bottom: 40px !important;
-}
-.mb-5{
-    margin-bottom: 50px !important;
-}
-.mb-6{
-    margin-bottom: 60px !important;
-}
 .mr-1{
     margin-right: 10px !important;
 }
@@ -390,6 +366,7 @@ a{
 .search-dropdown.mat-menu-panel{
     border-radius: 26px;
     max-width: 100%;
+    min-height: auto;
     .mat-menu-content{
         padding: 0;
     }
@@ -458,6 +435,12 @@ button.swipe-arrow{
     height: 12px;
     vertical-align: -2px;
 }
+.swiper-button-prev:after, 
+.swiper-container-rtl .swiper-button-next:after,
+.swiper-button-next:after, 
+.swiper-container-rtl .swiper-button-prev:after{
+    content: none;
+}
 
 /******* Product *******/
 .product-item{  
@@ -502,7 +485,9 @@ button.swipe-arrow{
         margin-top: 18px;
     }        
 }
-
+.old-price{
+    text-decoration: line-through;
+}
 
 /******* Back to top *******/
 .back-to-top{
@@ -729,111 +714,3 @@ button.swipe-arrow{
 .sidenav .mat-drawer-inner-container{
     overflow-x: hidden;
 }
-
-
-// Override Classes By Mohamed
-
-.logo img {
-    margin-top: 36px;
-}
-
-.app.blue .bg-primary {
-    background-color: #393c3f!important;
-}
-
-.app.blue .mat-elevation-z2 {
-    box-shadow: none!important;
-}
-
-.app.blue .mat-toolbar.mat-primary{
-    background-color: #fbfbf8!important; /* background header */
-    border-top: 2px solid #383c3d!important;
-    box-shadow: 0 2px 4px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.08);
-}
-
-.app.blue .horizontal-active-link {
-    color: #fff !important;
-    font-weight: 800 !important;
-    background-color: #383c3d!important;
-    padding: 0px 16px!important;
-    
-}
-
-.app.blue .top-toolbar.mat-toolbar-row {
-    color: #383c3d!important;
-}
-
-.app.blue .top-toolbar.mat-toolbar-row .top-menu a {
-    color: #383c3d!important;
-}
-
-.app.blue .top-toolbar.mat-toolbar-row {
-    border-bottom: 1px solid #dcdacb!important;
-    color: #bbdefb;
-}
-
-.app.blue .top-navbar {
-    background: transparent!important;
-}
-
-.app.blue .mat-button{color: #383c3d; /* color menu link */}
-
-.app.blue .horizontal-active-link {
-    color: #fff !important;
-    font-weight: 800!important;
-}
-
-.app.blue .mat-drawer {
-    background-color: black!important;
-    color: rgba(255, 251, 251, 0.87)!important;
-}
-
-.app.blue .active-link {
-    background-color: $colorprimary!important;
-}
-
-.app.blue .secondary-color {
-    color: #fff!important;
-}
-
-.footer[_ngcontent-my-app-c322] .subscribe-block[_ngcontent-my-app-c322] .subscribe-search-form[_ngcontent-my-app-c322] input[type=text][_ngcontent-my-app-c322] {
-    border: 1px solid #fff!important;
-    font-size: 14px!important;
-    background-color: transparent!important;
-    color: #fff!important;
-    border-radius: 5px!important;
-}
-
-.footer[_ngcontent-my-app-c322] .subscribe-block[_ngcontent-my-app-c322] .subscribe-search-form[_ngcontent-my-app-c322] button[_ngcontent-my-app-c322] {
-    border-radius: 5px!important;
-    background-color: #fff!important;
-    margin-right: 5px!important;
-}
-
-.app.blue .mat-flat-button.mat-primary, .app.blue .mat-raised-button.mat-primary, .app.blue .mat-fab.mat-primary, .app.blue .mat-mini-fab.mat-primary
-{background-color: $colorprimary!important;}
-
-.app.blue .mat-icon.mat-primary {
-    color: $colorprimary!important;
-}
-
-.app.blue .primary-text {
-    color: $colorprimary!important;
-}
-
-.app.blue .mat-tab-group.mat-primary .mat-ink-bar, .app.blue .mat-tab-nav-bar.mat-primary .mat-ink-bar {
-    background-color: $colorprimary!important;
-}
-
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: #fff;
-    opacity: 1; /* Firefox */
-  }
-  
-  :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: #fff;
-  }
-  
-  ::-ms-input-placeholder { /* Microsoft Edge */
-    color: #fff;
-  }

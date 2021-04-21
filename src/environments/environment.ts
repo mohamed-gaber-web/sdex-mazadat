@@ -1,15 +1,10 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
-const CORS = 'https://cors-anywhere.herokuapp.com/';
+
 export const environment = {
   production: false,
-  mapbox: {
-    accessToken: 'pk.eyJ1IjoiYWhtZWRpeiIsImEiOiJja2N3bDQ1dzQwMGlnMzVwZW11YmJudnB2In0.sPjpcFUzdk87zMtKJDsWIw'
-  },
-  // api_base_url: `${CORS}https://api.emzady.com`
-  // api_base_url: `https://api.emzady.com`
-  api_base_url: 'http://ecommerce-api.sdexegypt.com'
+  api_base_url: `http://ecommerce-api.sdex.online`
 };
 
 /*

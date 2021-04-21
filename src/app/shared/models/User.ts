@@ -1,6 +1,4 @@
-import Shipping from 'src/app/shared/models/Shipping';
-
-export default class User { 
+export class User {
     Id?: number;
     FirstName: string;
     LastName:  string;
@@ -9,7 +7,4 @@ export default class User {
     BirthDate:Date;
     Gender:number;
     IsActive:boolean;
-    Role:   string[];
-    Shipping:Shipping;
-    permissions: string[];
-  }
+}

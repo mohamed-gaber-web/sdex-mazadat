@@ -1,11 +1,4 @@
 @import "mixins";
-@import "variables";
-
-
-
-body{
-    font-family: $font-family;
-}
 
 .app[dir="rtl"]{    
     .mat-icon.caret{
@@ -94,25 +87,11 @@ body{
     .ps__thumb-y{
         right: auto !important;
         left: 1px !important;
+    } 
+
+    .menu-expand-icon {
+        right: auto;
+        left: 10px;
     }
+   
 }
-
-// Override By Mohmamed
-
-// @media(max-width: 955px) {
-// .menu-expand-icon {
-//     position: absolute!important;
-//     left: 10px!important;
-//     top: 10px!important;
-// }
-
-// }
-
-.footer[_ngcontent-my-app-c322] .subscribe-block[_ngcontent-my-app-c322] h1[_ngcontent-my-app-c322] {
-    margin-bottom: 14px!important;
-    font-size: 1.2rem!important;
-    text-align: right!important;
-    margin-right: 20px!important;
-}
-
-// Override By MOhmaed

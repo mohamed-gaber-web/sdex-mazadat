@@ -13,8 +13,13 @@ export class NotFoundComponent implements OnInit {
   ngOnInit() {
   }
 
-  public goHome(): void {
-    this.router.navigate(['/']);
+  public goHome(): void { 
+    if(this.router.routerState.snapshot.url.includes("/admin")){
+      this.router.navigate(['/admin']);
+    }
+    else{
+      this.router.navigate(['/']);
+    } 
   }
 
 }

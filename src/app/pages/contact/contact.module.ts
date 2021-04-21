@@ -4,16 +4,9 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { ContactComponent } from './contact.component';
-import { ContactResolver } from './contact.resolver';
 
 export const routes = [
-  {
-    path: '',
-    component: ContactComponent,
-    resolve: {
-      contactInfo: ContactResolver,
-    },
-  },
+  { path: '', component: ContactComponent, pathMatch: 'full' }
 ];
 
 @NgModule({
@@ -21,9 +14,10 @@ export const routes = [
     CommonModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
-    SharedModule,
+    SharedModule
   ],
-  declarations: [ContactComponent],
-  providers: [ContactResolver]
+  declarations: [
+    ContactComponent
+  ]
 })
-export class ContactModule {}
+export class ContactModule { }

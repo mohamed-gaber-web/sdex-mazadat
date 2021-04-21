@@ -1,146 +1,145 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { IBidding } from 'src/app/shared/models/IBidding.model';
-import { Observable, Subscription } from 'rxjs';
-import { DataService } from 'src/app/shared/services/data.service';
-import {
-  biddingCategoryApi,
-  biddingsListFeaturedApi,
-  homeSliderApi,
-} from 'src/app/shared/constants/api.constants';
+import { Component, OnInit } from '@angular/core';
+import { AppService } from '../../app.service';
+import { Product } from "../../app.models";
+import { ProductsService } from 'src/app/shared/services/products.service';
 import { map, tap } from 'rxjs/operators';
-import { BiddingsService } from 'src/app/shared/services/biddings.service';
-import { TranslateService } from '@ngx-translate/core';
+import { element } from 'protractor';
 import { StorageService } from 'src/app/shared/services/storage.service';
-import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 import { UiService } from 'src/app/shared/services/ui.service';
-import * as signalR from '@aspnet/signalr';
-import { signalRApi } from 'src/app/shared/constants/api.constants';
-import { ICategory } from 'src/app/shared/models/ICategory.model';
-import { HelpersService } from 'src/app/shared/services/helpers.service';
-import { SnackbarPosition } from 'src/app/shared/enums/snackbar-position.enum';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit, OnDestroy {
-  featureMzadat$: Observable<IBidding[]>;
-  categories$: Observable<ICategory[]>;
-  slides$: Observable<any[]>;
-  subs: Subscription[] = [];
-  hubConnection: signalR.HubConnection;
+export class HomeComponent implements OnInit {
+  public slides: [] = []
+  public brands = [];
+  brandOffset: number = 0;
+  brandLimit: number = 10;
+  public banners = [];
+  public featuredProducts: Array<Product>;
+  public onSaleProducts: Array<Product>;
+  public topRatedProducts: Array<Product>;
+  public newArrivalsProducts: Array<Product>; 
+  sub: Subscription[] = [];
+  isLoading = false;
+
 
   constructor(
-    private data: DataService,
-    private biddingsService: BiddingsService,
-    private translate: TranslateService,
-    private uiService: UiService,
-    private route: ActivatedRoute,
-    private helpers: HelpersService,
-    private storageService: StorageService
-  ) {}
+    public appService:AppService,
+    public ps: ProductsService,
+    public storageService: StorageService,
+    public translate: TranslateService,
+    public uiService: UiService) { }
 
   ngOnInit() {
-    // Getting Route Data
-    this.categories$ = this.route.data.pipe(map((res) => res.categories));
-    this.slides$ = this.route.data.pipe(map((res) => res.slides));
-    this.featureMzadat$ = this.route.data.pipe(map((res) => res.biddings));
+    this.getBanners();
+    this.getProducts("featured");
+    this.getBrands();
+    this.getSliders();
 
-    // Signal R Connection and listening for changes
-    this.startConnection();
-    this.hubConnection.on('biddingChangedEvent', (id) => {
-      this.getFeaturedBiddings();
-    });
-
-    this.hubConnection.onreconnected(() => {
-      this.getFeaturedBiddings();
-    });
-
-    this.hubConnection.onclose(() => {
-      this.subs.push(
-        this.uiService
-          .showMessage(
-            'biddingNotGettingUpdated',
-            '',
-            'refresh',
-            'infinite',
-            true,
-            SnackbarPosition.bottom
-          )
-          .onAction()
-          .subscribe(() => location.reload())
-      );
-    });
-
-    this.subs.push(
-      this.biddingsService.biddingsChanged.subscribe((res) => {
-        if (res) {
-          this.getFeaturedBiddings();
-        }
-      })
-    );
-
-    this.subs.push(
+    // Handle Language On Change 
+    this.sub.push(
       this.translate.onLangChange
         .pipe(
           tap((res: any) => {
             const flag = this.storageService.getFlag(res.lang);
             this.storageService.setLanguage(flag);
-            this.getFeaturedBiddings();
-            this.getCategories();
-            this.getHomeSlides();
+            this.getSliders();
+            this.getProducts();
+            location.reload()
           })
         )
         .subscribe()
     );
   }
 
-  getFeaturedBiddings() {
-    this.uiService.showLoadingBar();
-    this.featureMzadat$ = this.data.getList(biddingsListFeaturedApi).pipe(
-      tap((res) => {
-        this.biddingsService.biddingsChanged.next(false);
+  public onLinkClick(e){
+    this.getProducts(e.tab.textLabel.toLowerCase()); 
+  }
+
+  public getProducts(type?){
+    
+    // Featured Products
+    if(type == "featured" && !this.featuredProducts){
+      this.isLoading = true;
+      this.uiService.showLoadingBar();
+     this.sub.push(this.ps.getProducts('FeaturedProduct')
+     .pipe(map(response => {
+       Object.entries(response);
+       this.uiService.hideLoadingBar();
+       this.isLoading = false;  
+      return response['result'];
+      }))
+      .subscribe((res) => {this.featuredProducts = res;})
+     )}
+
+
+     // On sale Products
+    if(type == "on sale" && !this.onSaleProducts){
+      
+        this.uiService.showLoadingBar();
+        this.isLoading = true;
+        this.sub.push(this.ps.getProducts('OnSaleProduct').pipe(map(response => {
+          Object.entries(response);
+          this.isLoading = false;
+          this.uiService.hideLoadingBar();
+          return response['result'];
+        }))
+        .subscribe((res) => {
+            this.onSaleProducts = res;
+        })
+      )}
+    
+    // Latest Products
+    if(type == "new arrivals" && !this.newArrivalsProducts){
+      this.uiService.showLoadingBar();
+      this.isLoading = true;
+      this.sub.push(this.ps.getProducts('LatestProduct').pipe(map(response => {
+        Object.entries(response);
+        this.isLoading = false;
         this.uiService.hideLoadingBar();
-      }),
-      map((items) => items)
-    );
-  }
-
-  getCategories() {
-    this.categories$ = this.data
-      .getList(biddingCategoryApi)
-      .pipe(map((items) => items));
-  }
-
-  getHomeSlides() {
-    this.slides$ = this.data.get(homeSliderApi).pipe(
-      map((res: any) => {
-        const array = [];
-        res.forEach((item) => {
-          array.push({
-            image: this.helpers.correctImageUrl(item.imageUrl),
-            link: item.link,
-            title: item.sliderTranslationDtos[0]?.title,
-            subtitle: item.sliderTranslationDtos[0]?.subTitle,
-          });
-        });
-        return array;
+        return response['result'];
+      }))
+      .subscribe((res) => {
+          this.newArrivalsProducts = res;
       })
-    );
+      )}
+  
+  
+    }
+
+  public getBanners(){
+    this.appService.getBanners().subscribe(data=>{
+      this.banners = data;
+    })
   }
 
-  startConnection() {
-    this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(signalRApi)
-      .withAutomaticReconnect()
-      .build();
-    this.hubConnection
-      .start()
-      .catch((err) => console.log('Error while starting connection: ' + err));
+  public getBrands(){
+    this.isLoading = true;
+    this.sub.push(
+      this.appService.getBrands()
+      .subscribe(response => {
+        this.isLoading = false;
+        this.brands = response['result'];      
+      })
+    )
+  }
+
+  public getSliders(){
+    this.sub.push(
+      this.appService.getSliders()
+      .subscribe(response => {
+        this.slides = response['result'];      
+      })
+    )
   }
 
   ngOnDestroy() {
-    this.subs.forEach((sub) => sub.unsubscribe());
+    this.sub.forEach((sub) => sub.unsubscribe());
   }
+
 }

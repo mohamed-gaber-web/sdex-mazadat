@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import * as jwt_decode from 'jwt-decode';
-import { environment } from 'src/environments/environment';
-import User from '../models/User';
+import jwt_decode from 'jwt-decode';
+import { baseUrl } from '../api/api';
+import { User } from '../models/user';
+
+
 
 // import User from '../models/User';
 
@@ -9,6 +11,7 @@ import User from '../models/User';
   providedIn: 'root',
 })
 export class StorageService {
+  baseUrl = baseUrl;
   arabicFlag = {
     code: 'ar-EG',
     image: 'assets/images/flags/ar.svg',
@@ -19,76 +22,95 @@ export class StorageService {
     image: 'assets/images/flags/gb.svg',
     name: 'English',
   };
-  getLanguageDirection(): boolean {
-    if (this.exists('language')) {
-      if (JSON.parse(this.get('language')).name == 'العربية') return true;
+
+  danishFlag = {
+    code: 'da-DA',
+    image: 'assets/images/flags/da.svg',
+    name: 'Danish',
+  };
+
+  user: User;
+
+  // Lang Direction rtl and ltr
+  getLangDirection() {
+    if (this.existsStorage('lang')) {
+      if (JSON.parse(this.getStorage('lang')).name == 'العربية') return true;
     }
-    this.setLanguage({
-      name: 'English',
-      image: 'assets/images/flags/gb.svg',
-      code: 'en-US',
-    });
+    // this.setLang({
+    //   name: 'English',
+    //   image: 'assets/images/flags/gb.svg',
+    //   code: 'en-US',
+    // });
     return false;
   }
-  public user: User;
-  get(key: string) {
+
+  // create lang in local
+  setLang(value) {
+    return this.setStorage('lang', JSON.stringify(value)); // value // {name: 'العربية', image: flag}
+  }
+
+  // get lang
+  getLang() {
+    const langFound = this.existsStorage('lang');
+    if (langFound) {
+      return JSON.parse(this.getStorage('lang'));
+    } else {
+      this.setLang({
+        name: 'English',
+        image: 'assets/images/flags/gb.svg',
+        code: 'en-US',
+      });
+      return JSON.parse(this.getStorage('lang'));
+    }
+  }
+  
+  getStorage(key: string) { // get LocalStorage
     return localStorage.getItem(key);
   }
 
-  set(key, value) {
+  setStorage(key, value) { // create LocalStorage
     return localStorage.setItem(key, value);
   }
 
-  remove(key: string) {
+  removeStorage(key: string) { // Remove LocalStorage By key
     return localStorage.removeItem(key);
   }
 
-  removeKeys(keys: string[]) {
-    keys.forEach((key) => this.remove(key));
+  removeKeysStorage(keys: string[]) {
+    keys.forEach((key) => this.removeStorage(key));
   }
 
-  exists(key) {
-    return !!localStorage.getItem(key);
+  existsStorage(key) { // Check on key in localStorage
+    return !!localStorage.getItem(key); // return true or false
   }
 
-  clear() {
+  clearStorage() {
     return localStorage.clear();
   }
 
   setAccessToken(value) {
     var tokenInfo = this.getDecodedAccessToken(value); // decode token
     this.setUser(tokenInfo);
-    return this.set('access_token', value);
+    return this.setStorage('access_token', value);
   }
+
   setUser(value) {
-    return this.set('user', JSON.stringify(value));
+    return this.setStorage('user', JSON.stringify(value));
   }
   setLanguage(value) {
-    return this.set('language', JSON.stringify(value));
+    return this.setStorage('language', JSON.stringify(value));
   }
-  getLanguage() {
-    const langFound = this.exists('language');
-    if (langFound == true) {
-      return JSON.parse(this.get('language'));
-    } else {
-      this.setLanguage({
-        name: 'English',
-        image: 'assets/images/flags/gb.svg',
-        code: 'en-US',
-      });
-      return JSON.parse(this.get('language'));
-    }
-  }
+
   setExpiresIn(value) {
-    return this.set('expires_in', value);
+    return this.setStorage('expires_in', value);
   }
 
   getAccessToken() {
-    return this.get('access_token');
+    return this.getStorage('access_token');
   }
 
   getExpiresIn() {
-    return this.get('expires_in');
+    return this.getStorage('expires_in');
   }
 
   getDecodedAccessToken(token: string): any {
@@ -99,13 +121,13 @@ export class StorageService {
     }
   }
   getUser(): User {
-    var value = JSON.parse(this.get('user'));
+    var value = JSON.parse(this.getStorage('user')); // Json.parse convert text or string to javascript object '{}' >> {}
     this.user = new User();
     this.user.FirstName = value.firstname;
     this.user.LastName = value.lastname;
-    this.user.Role = value.role;
+    // this.user.Role = value.role;
     this.user.Email = value.email;
-    this.user.permissions = value.permissions;
+    // this.user.permissions = value.permissions;
     return this.user;
   }
 
@@ -114,6 +136,34 @@ export class StorageService {
       return this.arabicFlag;
     } else if (langName === 'en-US') {
       return this.englishFlag;
+    }else if (langName === 'da-DA') {
+      return this.danishFlag;
+    }
+  }
+
+  validBase64(value: string): string {
+    return value.substr(value.indexOf(',') + 1);
+  }
+
+  // handle image base64 
+  toBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  }
+
+  correctImageUrl(...args) {
+    if (typeof args[0] === 'string') {
+      const url = args[0].replace(/\\/g, '/');
+      const newUrl = `${this.baseUrl}/${url}`;
+      return newUrl;
+    } else if (args[0] instanceof Array) {
+      const images = [];
+      args[0].forEach((img) => images.push(this.correctImageUrl(img)));
+      return images;
     }
   }
 }

@@ -3,6 +3,7 @@
 	"new-user": "Register",
 	"Note": "Note",
 	"account-settings": "Account Settings",
+	"account": "Account",
 	"alreadyHaveAccount": "Already have an account? Sign in now!",
 	"apartment": "Apartment Number",
 	"area": "Area",
@@ -112,10 +113,17 @@
 	"address": "ADDRESS",
 	"phone": "PHONE",
 	"nameReq": "Name is required",
-	"emailreq": "Email is required",
+	"emailReq": "Email is required",
 	"emailErr": "Invalid email address",
 	"phoneReq": "Phone is required",
 	"messageReq": "Message is required",
+	"firstNameReq": "First Name is required",
+	"lastNameReq":  "Last Name is required",
+	"birthdayReq":  "Birthday is required",
+	"passwordReq":  "Password is required",
+	"confirmPassReq":  "Confirm Password is required",
+	"notMatch": "Passwords do not match",
+	"passMin": "Password isn't long enough, minimum of 6 characters",
 	"submitForm": "submit",
 	"opps": "Opps, it seems that this page does not exist",
 	"opps2": "If you are sure it should, search for it",
@@ -137,7 +145,4 @@
 	"nationalIdNumber": "National Id Number",
 	"terms&conditions": "Terms & Conditions",
 	"acceptTerms": "Accept Terms"
-
-
-
 }

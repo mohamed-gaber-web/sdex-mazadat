@@ -60,11 +60,9 @@
 
     .mat-snack-bar-container.success {
         background: #388E3C;
-        color: white;
     }
     .mat-snack-bar-container.error {
         background: #E53935;
-        color: white;
     }
 
     .new-price{
@@ -78,15 +76,15 @@
         background-color: mat-color($primary); 
         color: #fff;
     }
-    // .horizontal-active-link,
-    // .app-dropdown .mat-menu-item.horizontal-active-link{
-    //     color: mat-color($primary) !important; 
-    // }
+    .horizontal-active-link,
+    .app-dropdown .mat-menu-item.horizontal-active-link{
+        color: mat-color($primary) !important; 
+    }
 
     .filter-brands  button.selected,
     .filter-buttons button.selected{
         box-shadow: 0px 0px 1px 2px mat-color($primary);
-    } 
+    }  
 
     /* ngx-pagination */
     .product-pagination .ngx-pagination{
@@ -100,10 +98,23 @@
             color: mat-color($foreground, base);
         }
     }
-}
 
-// Override Classes By Me
 
-.app.blue .mat-toolbar.mat-primary{
-    background-color: #000;
+    // admin styles
+    .breadcrumb{
+        a{
+            color: mat-color($primary);
+        }
+        .breadcrumb-item+.breadcrumb-item:before{
+            color: mat-color($foreground, text);
+        }
+    } 
+    .user-block{
+        border-bottom: 1px solid mat-color($foreground, divider);
+    }
+
+    .menu-item .mat-button:not(.active-link) .menu-icon{
+        color: mat-color($primary);
+    }
+
 }

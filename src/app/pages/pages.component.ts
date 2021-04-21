@@ -1,176 +1,142 @@
-import {
-  Component,
-  OnInit,
-  HostListener,
-  ViewChild,
-  Inject,
-  PLATFORM_ID,
-} from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { isPlatformBrowser } from '@angular/common';
+import { LoginCustomer } from './../shared/models/customer-login';
+import { Component, OnInit, HostListener, ViewChild } from '@angular/core'; 
 import { Router, NavigationEnd } from '@angular/router';
 import { Settings, AppSettings } from '../app.settings';
 import { AppService } from '../app.service';
 import { Category, Product } from '../app.models';
 import { SidenavMenuService } from '../theme/components/sidenav-menu/sidenav-menu.service';
 
-import { StorageService } from 'src/app/shared/services/storage.service';
-import { TranslateService } from '@ngx-translate/core';
-import { DataService } from 'src/app/shared/services/data.service';
-import { systemInfoApi } from 'src/app/shared/constants/api.constants';
-
 @Component({
   selector: 'app-pages',
   templateUrl: './pages.component.html',
   styleUrls: ['./pages.component.scss'],
-  providers: [SidenavMenuService],
+  providers: [ SidenavMenuService ]
 })
 export class PagesComponent implements OnInit {
-
-  contactInfo$: Observable<any>;
-
-  public flags = [
-    { name: 'English', image: 'assets/images/flags/gb.svg', code: 'en-US' },
-    { name: 'العربية', image: 'assets/images/flags/ar.svg', code: 'ar-EG' },
-  ];
-  public flag: any;
-
-  public showBackToTop: boolean = false;
-  public categories: Category[];
-  public category: Category;
-  public sidenavMenuItems: Array<any>;
-  @ViewChild('sidenav', { static: true }) sidenav: any;
+  public showBackToTop:boolean = false; 
+  public categories:Category[];
+  public category:Category;
+  public sidenavMenuItems:Array<any>;
+  cartListStorage = [];
+  cartCountList: number;
+  totalCartCount: number = 0;
+  totalprice: number = 0;
+  @ViewChild('sidenav', { static: true }) sidenav:any;
 
   public settings: Settings;
-  constructor(
-    public appSettings: AppSettings,
-    public appService: AppService,
-    public sidenavMenuService: SidenavMenuService,
-    public router: Router,
-    private translate: TranslateService,
-    public storageService: StorageService,
-    private data: DataService,
+  constructor(public appSettings:AppSettings, 
+              public appService:AppService, 
+              public sidenavMenuService:SidenavMenuService,
+              public router:Router) { 
+    this.settings = this.appSettings.settings; 
     
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {
-    this.settings = this.appSettings.settings;
   }
 
   ngOnInit() {
-
-    this.contactInfo$ = this.data
-    .get(systemInfoApi)
-    .pipe(
-      map((res: any) => res)
-    );
-
-    // this.getCategories();
+    this.getCategories();
     this.sidenavMenuItems = this.sidenavMenuService.getSidenavMenuItems();
+
+      // get cart list from local storage
+
+      
+      this.appService.Data.cartList = JSON.parse(localStorage.getItem('cartList'));
+      
+      this.appService.Data.cartList.forEach(element => {
+        this.cartCountList = element.cartCount;
+        this.appService.Data.totalCartCount += this.totalCartCount + element.cartCount;
+        this.appService.Data.totalPrice += this.totalprice + (element.cartCount * element.price);
+      });
+
+  } 
+
+  public getCategories(){    
+    this.appService.getCategories().subscribe(data => {
+      this.categories = data;
+      this.category = data[0];
+      this.appService.Data.categories = data;
+    })
   }
 
-  // public getCategories() {
-  //   this.appService.getCategories().subscribe((data) => {
-  //     this.categories = data;
-  //     this.category = data[0];
-  //     this.appService.Data.categories = data;
-  //   });
-  // }
-
-  public changeCategory(event) {
-    if (event.target) {
-      this.category = this.categories.filter(
-        (category) => category.name == event.target.innerText
-      )[0];
+  public changeCategory(event){
+    if(event.target){
+      this.category = this.categories.filter(category => category.name == event.target.innerText)[0];
     }
-    if (window.innerWidth < 960) {
+    if(window.innerWidth < 960){
       this.stopClickPropagate(event);
-    }
+    } 
   }
 
   public remove(product) {
+    
     const index: number = this.appService.Data.cartList.indexOf(product);
     if (index !== -1) {
       this.appService.Data.cartList.splice(index, 1);
-      this.appService.Data.totalPrice =
-        this.appService.Data.totalPrice - product.newPrice * product.cartCount;
-      this.appService.Data.totalCartCount =
-        this.appService.Data.totalCartCount - product.cartCount;
+      this.appService.Data.totalPrice = this.appService.Data.totalPrice - product.price*product.cartCount;
+      this.appService.Data.totalCartCount = this.appService.Data.totalCartCount  - product.cartCount;
       this.appService.resetProductCartCount(product);
     }
+    
+    localStorage.setItem('cartList', JSON.stringify(this.appService.Data.cartList));
+      
   }
 
-  public clear() {
-    this.appService.Data.cartList.forEach((product) => {
+  public clear(){
+    this.cartListStorage.forEach(product=>{
       this.appService.resetProductCartCount(product);
     });
     this.appService.Data.cartList.length = 0;
     this.appService.Data.totalPrice = 0;
     this.appService.Data.totalCartCount = 0;
+
+    localStorage.setItem('cartList', JSON.stringify(this.cartListStorage));
+  }
+ 
+
+  public changeTheme(theme){
+    this.settings.theme = theme;       
   }
 
-  public changeTheme(theme) {
-    this.settings.theme = theme;
-  }
-
-  public stopClickPropagate(event: any) {
+  public stopClickPropagate(event: any){
     event.stopPropagation();
     event.preventDefault();
   }
 
-  public search() {}
+  public search(){}
 
-  public changeLang(flag) {
-    this.flag = flag;
-    this.translate.use(flag.code);
-    if (flag.name === 'العربية') {
-      this.settings.rtl = true;
-      this.storageService.setLanguage(flag);
-    } else {
-      this.settings.rtl = false;
-      this.storageService.setLanguage(flag);
-    }
-  }
-
-  public scrollToTop() {
+ 
+  public scrollToTop(){
     var scrollDuration = 200;
-    var scrollStep = -window.pageYOffset / (scrollDuration / 20);
-    var scrollInterval = setInterval(() => {
-      if (window.pageYOffset != 0) {
-        window.scrollBy(0, scrollStep);
-      } else {
-        clearInterval(scrollInterval);
+    var scrollStep = -window.pageYOffset  / (scrollDuration / 20);
+    var scrollInterval = setInterval(()=>{
+      if(window.pageYOffset != 0){
+         window.scrollBy(0, scrollStep);
       }
-    }, 10);
-    if (window.innerWidth <= 768) {
-      setTimeout(() => {
-        if (isPlatformBrowser(this.platformId)) {
-          window.scrollTo(0, 0);
-        }
-      });
+      else{
+        clearInterval(scrollInterval); 
+      }
+    },10);
+    if(window.innerWidth <= 768){
+      setTimeout(() => { window.scrollTo(0,0) });
     }
   }
   @HostListener('window:scroll', ['$event'])
   onWindowScroll($event) {
-    $event.target.documentElement.scrollTop > 300
-      ? (this.showBackToTop = true)
-      : (this.showBackToTop = false);
+    ($event.target.documentElement.scrollTop > 300) ? this.showBackToTop = true : this.showBackToTop = false;  
   }
 
-  ngAfterViewInit() {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.sidenav.close();
-      }
-    });
-    this.sidenavMenuService.expandActiveSubMenu(
-      this.sidenavMenuService.getSidenavMenuItems()
-    );
-  }
-
-  public closeSubMenus() {
-    if (window.innerWidth < 960) {
-      this.sidenavMenuService.closeAllSubMenus();
+    ngAfterViewInit(){
+      this.router.events.subscribe(event => {
+        if (event instanceof NavigationEnd) { 
+          this.sidenav.close(); 
+        }                
+      });
+      this.sidenavMenuService.expandActiveSubMenu(this.sidenavMenuService.getSidenavMenuItems());
     }
+
+  public closeSubMenus(){
+    if(window.innerWidth < 960){
+      this.sidenavMenuService.closeAllSubMenus();
+    }    
   }
+
 }

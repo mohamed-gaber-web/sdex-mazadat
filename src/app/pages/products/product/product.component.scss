@@ -81,3 +81,21 @@
         cursor:url('../../../../assets/images/others/zoom.svg') 10 10, zoom-in;
     }
 }
+
+.old-price {
+    text-decoration: line-through;
+    color: rgba(0,0,0,.54)!important;
+}
+
+.stock{
+    background-color: #ff5252;
+    padding: 7px 10px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #fff;
+    border-radius: 10px;
+}
+
+.category {
+    margin-bottom: 10px;
+}

@@ -1,14 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  HttpClientModule,
-  HTTP_INTERCEPTORS,
-  HttpClient,
-} from '@angular/common/http';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { LoadingBarModule } from '@ngx-loading-bar/core';
+
 import { AgmCoreModule } from '@agm/core';
-import { HttpInterceptor } from './http.interceptor';
 
 import { OverlayContainer, Overlay } from '@angular/cdk/overlay';
 import { MAT_MENU_SCROLL_STRATEGY } from '@angular/material/menu';
@@ -16,7 +15,7 @@ import { CustomOverlayContainer } from './theme/utils/custom-overlay-container';
 import { menuScrollStrategy } from './theme/utils/scroll-strategy';
 
 import { SharedModule } from './shared/shared.module';
-import { routing } from './app.routing';
+import { AppRoutingModule } from './app.routing';
 import { AppComponent } from './app.component';
 import { PagesComponent } from './pages/pages.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
@@ -24,33 +23,37 @@ import { TopMenuComponent } from './theme/components/top-menu/top-menu.component
 import { MenuComponent } from './theme/components/menu/menu.component';
 import { SidenavMenuComponent } from './theme/components/sidenav-menu/sidenav-menu.component';
 import { BreadcrumbComponent } from './theme/components/breadcrumb/breadcrumb.component';
-// import { HomeProductsComponent } from './theme/components/home-products/products.component';
+
 import { AppSettings } from './app.settings';
 import { AppService } from './app.service';
 import { AppInterceptor } from './theme/utils/app-interceptor';
+import { HttpInterceptor } from './http.interceptor';
 import { OptionsComponent } from './theme/components/options/options.component';
 import { FooterComponent } from './theme/components/footer/footer.component';
-// import ngx-translate and the http loader
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
+}
 @NgModule({
-  imports: [
-    BrowserModule.withServerTransition({ appId: 'my-app' }),
+   imports: [
+    BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
     NgxSpinnerModule,
+    LoadingBarModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyA1rF9bttCxRmsNdZYjW7FzIoyrul5jb-s',
+      apiKey: 'AIzaSyAO7Mg2Cs1qzo_3jkKkZAKY6jtwIlm41-I'
     }),
     SharedModule,
-    routing,
+    AppRoutingModule,
     TranslateModule.forRoot({
       loader: {
-        provide: TranslateLoader,
+        provide: TranslateLoader, 
         useFactory: HttpLoaderFactory,
         deps: [HttpClient],
-      },
-    }),
+        },
+        defaultLanguage: 'en-US'
+  })
   ],
   declarations: [
     AppComponent,
@@ -61,28 +64,17 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
     SidenavMenuComponent,
     BreadcrumbComponent,
     OptionsComponent,
-    FooterComponent,
-  ],
+    FooterComponent  ], 
   providers: [
     AppSettings,
-    AppService,
+    AppService, 
     { provide: OverlayContainer, useClass: CustomOverlayContainer },
-    {
-      provide: MAT_MENU_SCROLL_STRATEGY,
-      useFactory: menuScrollStrategy,
-      deps: [Overlay],
-    },
-    { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptor, multi: true },
-    // { provide: CountdownGlobalConfig, useFactory: countdownConfigFactory }
+    { provide: MAT_MENU_SCROLL_STRATEGY, useFactory: menuScrollStrategy, deps: [Overlay] },
+    { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true } // AppInterceptor
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
-export class AppModule {}
-// required for AOT compilation
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
-}
 
-// export function countdownConfigFactory(): CountdownGlobalConfig {
-//   return { format: `mm:ss` };
-// }
+
+export class AppModule { }
+

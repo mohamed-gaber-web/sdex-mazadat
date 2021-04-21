@@ -140,7 +140,7 @@
             <div *ngFor="let product of products | paginate: { itemsPerPage: count, currentPage: page }" fxFlex="100" [fxFlex.gt-sm]="viewCol" fxFlex.sm="50" class="col">
                 <mat-card class="product-item text-center">
                     <mat-chip-list *ngIf="product.discount">
-                        <mat-chip color="warn" selected="true">{{product.discount}}% OFF</mat-chip>
+                        <mat-chip color="warn" selected="true">{{((product.price-product.discount)/product.price) | percent}} OFF</mat-chip>
                     </mat-chip-list>
                     <a [routerLink]="['/products', product.id, product.name]" class="image-link">
                         <img [src]="product.images[0].medium" alt="">
@@ -170,7 +170,7 @@
                     <div fxLayout="row wrap">
                         <div fxFlex="100" fxFlex.gt-xs="40" class="p-2">
                             <mat-chip-list *ngIf="product.discount" class="list-view">
-                                <mat-chip color="warn" selected="true">{{product.discount}}% OFF</mat-chip>
+                                <mat-chip color="warn" selected="true">{{((product.price-product.discount)/product.price) | percent}} OFF</mat-chip>
                             </mat-chip-list>
                             <a [routerLink]="['/products', product.id, product.name]" class="image-link">
                                 <img [src]="product.images[0].medium" alt="">

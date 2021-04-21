@@ -103,6 +103,7 @@
 	"nationalIdNumber": "الرقم القومي",
 	"documentSentForReview": "تم ارسال المعلومات بنجاح وجاري المراجعة",
 	"toBid": "للمزايدة",
+	"account": "حسابي",
 	"about": "من نحن",
 	"terms&conditions": "الشروط والاحكام",
 	"faq": "الاسئلة المتكررة",
@@ -138,7 +139,15 @@
 	"confirmationLinkSendSuccessfully": "تم ارسال رابط التفعيل بنجاح",
 	"resendConfirmationLink": "اعادة ارسال رابط التفعيل",
 	"acceptTerms": "اوافق علي الشروط والاحكام",
-	"name": "الاسم"
+	"name": "الاسم",
+	"firstNameReq": "الاسم الاول مطلوب",
+	"lastNameReq":  "الاسم التاني مطلوب",
+	"birthdayReq":  "تاريخ الميلاد مطلوب",
+	"passwordReq":  "كلمة السر مطلوب",
+	"confirmPassReq":  "تأكيد كلمة السر مطلوب",
+	"notMatch": "كلمة السر غير متطابقة",
+	"passMin": "كلمة المرور ليست طويلة بما يكفي ، بحد أدنى 6 أحرف"
+
 
 
 
